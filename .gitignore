@@ -1,0 +1,24 @@
+# Large pickle files (exceed GitHub 100MB limit)
+similarity.pkl
+
+# Dataset files (download from Kaggle: https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata)
+*.csv
+
+# IDE files
+.idea/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Virtual documents
+.virtual_documents/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.env
+venv/

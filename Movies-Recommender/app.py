@@ -530,7 +530,20 @@ def load_movies():
 
 @st.cache_resource
 def load_similarity():
-    return pickle.load(open("similarity.pkl", "rb"))
+    import os
+    if os.path.exists("similarity.pkl"):
+        return pickle.load(open("similarity.pkl", "rb"))
+    else:
+        # Fallback: Compute similarity matrix on the fly
+        from sklearn.feature_extraction.text import CountVectorizer
+        from sklearn.metrics.pairwise import cosine_similarity
+        
+        cv = CountVectorizer(max_features=5000, stop_words='english')
+        # Ensure tags column is filled
+        movies['tags'] = movies['tags'].fillna('')
+        vector = cv.fit_transform(movies['tags']).toarray()
+        sim = cosine_similarity(vector)
+        return sim
 
 
 movies = load_movies()

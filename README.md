@@ -1,13 +1,23 @@
 # 🎬 Movie Recommendation System
 
-A content-based movie recommendation system that suggests similar movies based on your selection. Built with Python, Machine Learning, and Streamlit.
+A content-based movie recommendation system that suggests similar movies based on your selection. Built with Python, Machine Learning, and a premium dark cinematic Streamlit UI.
+
+![Python](https://img.shields.io/badge/Python-3.7+-blue?style=flat-square&logo=python)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.24+-red?style=flat-square&logo=streamlit)
+![TMDB](https://img.shields.io/badge/TMDB-API-01b4e4?style=flat-square)
+![License](https://img.shields.io/badge/License-Open%20Source-green?style=flat-square)
+
+---
 
 ## ✨ Features
 
-- **Content-Based Filtering** — Recommends movies based on metadata like genres, keywords, cast, and crew
-- **Interactive Web App** — Clean Streamlit interface with a searchable movie dropdown
-- **Movie Posters** — Fetches real-time poster images from the TMDB API
-- **Top 5 Recommendations** — Displays the 5 most similar movies with their posters
+- 🤖 **Content-Based Filtering** — Recommends movies based on genres, keywords, cast & crew
+- 🎨 **Premium Dark UI** — Cinematic dark theme with animated gradient orbs & glassmorphism
+- 🍿 **Top 10 Recommendations** — Ranked movie cards with posters, ratings, genres & overviews
+- 🎬 **Movie Spotlight** — Full details of your selected movie (poster, rating, year, overview)
+- ✨ **Hover Animations** — Cards lift & reveal movie overview on hover
+- 🛡️ **Error Handling** — Graceful fallbacks if TMDB API is unavailable
+- ⚡ **Fast Reloads** — Data cached with `@st.cache_data` for instant responses
 
 ## 🛠️ Tech Stack
 
@@ -17,82 +27,87 @@ A content-based movie recommendation system that suggests similar movies based o
 | Pandas & NumPy | Data processing |
 | Scikit-learn | Cosine similarity & vectorization |
 | Streamlit | Web application framework |
-| TMDB API | Movie posters & metadata |
+| TMDB API | Real-time movie posters & metadata |
 | Jupyter Notebook | Data analysis & model building |
 
 ## 📂 Project Structure
 
 ```
 Movie-Recommendation-System/
-├── movie-recommender-system.ipynb   # Data analysis & model building notebook
-├── movie_dict.pkl                   # Processed movie data (pickle)
-├── movies.pkl                       # Movie DataFrame (pickle)
+├── movie-recommender-system.ipynb   # Data analysis & model building
+├── movie_dict.pkl                   # Processed movie data
+├── movies.pkl                       # Movie DataFrame
 ├── Movies-Recommender/              # Streamlit web app
-│   ├── app.py                       # Main application
+│   ├── app.py                       # Main application (premium UI)
 │   ├── requirements.txt             # Python dependencies
-│   ├── setup.sh                     # Streamlit config for deployment
-│   └── Procfile                     # Heroku deployment config
+│   └── similarity.pkl               # Cosine similarity matrix (generated locally)
 └── README.md
 ```
 
+> **Note:** `similarity.pkl` is not tracked in git (too large). Generate it by running the Jupyter notebook.
+
 ## 📥 Dataset
 
-This project uses the **TMDB 5000 Movie Dataset** from Kaggle. Download the following files and place them in the root directory:
+This project uses the **TMDB 5000 Movie Dataset** from Kaggle. Download and place in the root directory before running the notebook:
 
-1. [tmdb_5000_movies.csv](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata)
-2. [tmdb_5000_credits.csv](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata)
+👉 [tmdb-movie-metadata on Kaggle](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata)
+
+Files needed:
+- `tmdb_5000_movies.csv`
+- `tmdb_5000_credits.csv`
 
 ## 🚀 Getting Started
 
-### Prerequisites
+### 1. Clone the repository
+```bash
+git clone https://github.com/AdityaTawhare/Movie-Recommendation-System.git
+cd Movie-Recommendation-System
+```
 
-- Python 3.7+
-- pip
+### 2. Download the dataset
+Get both CSV files from [Kaggle](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata) and place them in the root directory.
 
-### Installation
+### 3. Generate the similarity model
+Run the Jupyter notebook to generate `similarity.pkl`:
+```bash
+jupyter notebook movie-recommender-system.ipynb
+```
+Then copy `similarity.pkl` into `Movies-Recommender/`.
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/AdityaTawhare/Movie-Recommendation-System.git
-   cd Movie-Recommendation-System
-   ```
+### 4. Install dependencies
+```bash
+cd Movies-Recommender
+pip install -r requirements.txt
+```
 
-2. **Download the dataset** from [Kaggle](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata) and place the CSV files in the root directory.
+### 5. Run the app
+```bash
+streamlit run app.py
+```
 
-3. **Generate the similarity model** by running the Jupyter notebook:
-   ```bash
-   jupyter notebook movie-recommender-system.ipynb
-   ```
-   This will generate `similarity.pkl` needed by the web app.
+Open your browser at **http://localhost:8501** 🎉
 
-4. **Install dependencies**
-   ```bash
-   cd Movies-Recommender
-   pip install -r requirements.txt
-   ```
+## 🧠 How It Works
 
-5. **Run the app**
-   ```bash
-   streamlit run app.py
-   ```
+```
+Raw Data → Preprocessing → Feature Engineering → Vectorization → Cosine Similarity → Recommendations
+```
 
-6. Open your browser at `http://localhost:8501`
+1. **Preprocessing** — Merges movies & credits datasets, extracts genres, keywords, cast, crew
+2. **Feature Engineering** — Combines metadata into a single "tags" field per movie
+3. **Vectorization** — Converts tags to numerical vectors using `CountVectorizer` (5000 features)
+4. **Cosine Similarity** — Calculates pairwise similarity scores across all ~4800 movies
+5. **Recommendation** — Returns top 10 most similar movies for any selection
 
-## 📸 How It Works
+## 📸 App Preview
 
-1. Select a movie from the dropdown menu
-2. Click **"Show Recommendation"**
-3. View 5 similar movie recommendations with their posters
-
-## 🧠 Algorithm
-
-The recommendation engine uses **content-based filtering**:
-
-1. **Data Preprocessing** — Merges movie and credits datasets, extracts genres, keywords, cast, and crew
-2. **Feature Engineering** — Combines metadata into a single text feature ("tags")
-3. **Vectorization** — Converts tags into numerical vectors using `CountVectorizer`
-4. **Cosine Similarity** — Calculates similarity scores between all movie pairs
-5. **Recommendation** — Returns the top 5 most similar movies for any given selection
+| Feature | Description |
+|---------|-------------|
+| 🌌 Animated background orbs | Floating red, purple & blue blurred orbs |
+| 🎬 Movie Spotlight | Selected movie shown with full details |
+| 🃏 Ranked cards | `#1`–`#10` badges + golden rating chips |
+| 🎭 Genre tags | Pill-style genre labels per movie |
+| 🔍 Smart hover | Overview text revealed on card hover |
 
 ## 📄 License
 
@@ -100,4 +115,4 @@ This project is open source and available for learning and educational purposes.
 
 ---
 
-⭐ If you found this project helpful, give it a star on GitHub!
+⭐ **If you found this helpful, give it a star on GitHub!**

@@ -1,0 +1,22 @@
+name: Keep Streamlit App Alive
+
+on:
+  schedule:
+    # Runs every 5 minutes
+    - cron: '*/5 * * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Streamlit App
+        run: |
+          echo "Pinging Movie Recommender app..."
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}" https://movies-recommendations-system-1.streamlit.app/)
+          echo "HTTP Status: $STATUS"
+          if [ "$STATUS" = "200" ]; then
+            echo "✅ App is alive!"
+          else
+            echo "⚠️ App returned status: $STATUS"
+          fi
